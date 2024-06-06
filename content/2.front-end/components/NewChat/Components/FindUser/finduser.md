@@ -25,3 +25,92 @@ O componente FindUser utiliza os seguintes estados e hooks:
 - `FriendsList`:  um componente que exibe a lista de amigos do usuário atual.
 - `UserCard`:  um componente que exibe as informações de um usuário em um cartão.
 
+## **Estrutura do Código**
+```javascript
+
+export const FindUser = ({ onClose }: FindUserProps) => {
+  const { setRecipient } = useContext(ChatContext)
+  const [userNameSearchedList, setUserNameSearchedList] = useState('')
+  const userId = Cookies.get('userId')
+  const { users, usersListLoading, usersListError } = useGetAllUsersList()
+  const { friendsList } = useGetFriendsList()
+  const addFriendMutation = AddFriendMutation()
+
+  const onFindInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const findUserNameValue = event?.target.value
+    setUserNameSearchedList(findUserNameValue)
+  }
+
+  const isFriend = (user: User) => {
+    return friendsList?.some((friend: User) => friend.id === user.id)
+  }
+
+  const filteredUserNameList = users?.filter((user: User) => {
+    return (
+      user?.nome?.toLowerCase().includes(userNameSearchedList.toLowerCase()) &&
+      !isFriend(user)
+    )
+  })
+
+  return (
+    <>
+      <Input
+        className="find-input-bar"
+        style={searchInputBarStyles}
+        onChange={onFindInputChange}
+        value={userNameSearchedList}
+        placeholder="busque por um usuário..."
+      />
+      <Flex vertical style={{ gap: '1.5rem', height: '100%', width: '100%' }}>
+        {usersListLoading && <h3>carregando...</h3>}
+        {usersListError && (
+          <h3>
+            Não foi possível carregar a lista de usuários. Por favor, tente
+            novamente.
+          </h3>
+        )}
+        {userNameSearchedList &&
+          filteredUserNameList
+            ?.filter((userNome) => userNome.id !== userId)
+            .map((user: User) => {
+              return (
+                <div key={user.id} className="userCardStyle">
+                  <UserCard
+                    name={user.nome}
+                    image={user.avatar}
+                    onClick={() => {
+                      setRecipient(user)
+                      onClose()
+                    }}
+                  />
+                  <Button
+                    style={newChatButtonStyle}
+                    className="newChatButtonStyle"
+                    shape="circle"
+                    icon={<PlusOutlined />}
+                    typeof="primary"
+                    onClick={() => {
+                      if (userId) {
+                        addFriendMutation.mutate({
+                          userId,
+                          friendId: user.id,
+                        })
+                      }
+                      setUserNameSearchedList('')
+                    }}
+                  />
+                </div>
+              )
+            })}
+      </Flex>
+      {!userNameSearchedList && (
+        <Flex vertical gap={16}>
+          <h3>Lista de amigos</h3> <FriendsList onClose={onClose} />
+        </Flex>
+      )}
+    </>
+  )
+}
+
+
+```

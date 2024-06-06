@@ -17,6 +17,7 @@ O componente HeaderChat renderiza os seguintes componentes:
 - [`ProfileName`](./Components/ProfileContact/ProfileContact.md): um componente que exibe o nome do contato ou grupo.
 - `StatusContact`:  um componente que exibe o status de online/offline do contato.
 - [`MenuInfo`](../MenuInfo/MenuInfo.md): um componente que exibe o menu de informações do perfil.
+- [`GroupContact`](../Header/Components/GroupsContacts/GroupsContact.md): responsável por trazer nome dos integrantes incluídos no grupo.
 
 O componente ImageProfile não define funções específicas.
 # **Estados e Contextos Utilizados**

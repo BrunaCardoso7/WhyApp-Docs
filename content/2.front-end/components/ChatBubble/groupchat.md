@@ -33,13 +33,6 @@ O componente GroupChatBubble utiliza o seguinte estado:
   
 ## **Estrutura do Código**
 ```javascript
-import { GroupMessage } from '@/model/GroupMessageModel'
-import { Flex } from 'antd'
-import Cookies from 'js-cookie'
-import React, { ReactNode } from 'react'
-import ProfileContact from '../../Profile'
-import SentAt from '../components/sendAt'
-
 export interface GroupChatBubbleProps extends GroupMessage {
   showProfileContact: boolean
   children: ReactNode

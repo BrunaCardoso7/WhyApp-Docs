@@ -1,5 +1,5 @@
 # **Componente ChatBubble**
-O ChatBubble exibe uma bolha de chat que contém uma mensagem. Ele diferencia automaticamente as mensagens enviadas pelo usuário atual das mensagens recebidas de outros usuários.
+O Chat Bubble é o componente responsável por capturar as mensagens dos usuários e renderiza-los em um componente interativo e dinâmico.
 # **Funcionalidades Principais**
 - `mensagem: string`: A mensagem a ser exibida na bolha de chat
 - `fromUserId: string`: O ID do usuário que enviou a mensagem.
@@ -8,9 +8,50 @@ O ChatBubble exibe uma bolha de chat que contém uma mensagem. Ele diferencia au
 # **Componentes**
 O componente ChatBubble renderiza os seguintes componentes:
 
-- `SentAt`: um componente que exibe a data e hora de envio da mensagem.
+- [`SentAt`](./Components/SendAt.md): um componente que exibe a data e hora de envio da mensagem.
 - `children`: Conteúdo que é envilvido pelo chat bubble.
+## **Estrutura do Código**
+```javascript
+export interface BubbleChatProps extends Message {
+  children: ReactNode
+}
 
+const userId = Cookies.get('userId')
+
+const ChatBubble: React.FC<BubbleChatProps> = ({
+  mensagem: message,
+  createdAt,
+  fromUserId,
+}) => {
+  return (
+    <div
+      style={{
+        flex: '0 1 auto',
+        maxWidth: '100%',
+        height: 'fit-content',
+        padding: '1rem',
+        backgroundColor: `${fromUserId === userId ? 'var(--shadow-primary-500)' : 'var(--neutral-600)'}`,
+        borderRadius: '14px',
+        color: '#FFFFFF',
+        marginLeft: '4rem',
+        wordWrap: 'break-word',
+      }}
+    >
+      <p
+        style={{
+          width: 'max-content',
+          maxWidth: '22.5rem',
+        }}
+      >
+        {message}
+      </p>
+      {createdAt && <SentAt time={createdAt} />}
+    </div>
+  )
+}
+export default ChatBubble
+
+```
 # **Exemplo de uso**
 
 - `userId`: obtido dos cookies usando Cookies.get('userId').
